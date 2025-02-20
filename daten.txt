@@ -1,0 +1,107 @@
+CREATE TYPE "Geschlecht" AS ENUM (
+  'maennlich',
+  'weiblich'
+);
+ 
+CREATE TYPE "Rolle" AS ENUM (
+  'Tierpfleger',
+  'Tierarzt',
+  'Verkaeufer',
+  'Normal'
+);
+
+CREATE TABLE "Gehege" (
+  "id" serial PRIMARY key,
+  "name" text,
+  "groesse" numeric,
+  "kosten" numeric
+);
+ 
+CREATE TABLE "Tier" (
+  "id" serial PRIMARY KEY,
+  "verpflegungskosten" numeric,
+  "name" text,
+  "geburtsdatum" date,
+  "geschlecht" Geschlecht,
+  "art" text,
+  "tierarzt_id" integer,
+  "gehege_id" integer
+);
+
+CREATE TABLE "Personal" (
+  "id" serial PRIMARY KEY,
+  "name" text,
+  "rolle" Rolle,
+  "gehalt" numeric
+);
+ 
+CREATE TABLE "Personal_Gehege" (
+  "gehege_id" integer NOT NULL,
+  "tierpfleger_id" integer NOT NULL
+);
+ 
+CREATE TABLE "Zoo" (
+  "id" serial PRIMARY KEY,
+  "eintrittspreis" numeric,
+  "kontostand" numeric
+);
+
+CREATE TABLE "Verkaufsstand" (
+  "id" serial PRIMARY KEY,
+  "produktart" text,
+  "profit" numeric,
+  "verkauefer_id" integer
+);
+ 
+CREATE TABLE "Umsatz" (
+  "id" serial PRIMARY KEY,
+  "wert" numeric,
+  "datum" date,
+  "stand_id" integer,
+  "spende_id" integer,
+  "is_eintritt" boolean
+);
+ 
+CREATE TABLE "Spende" (
+  "id" serial PRIMARY KEY,
+  "spender" text,
+  "pdf_url" text
+);
+
+ALTER TABLE "Tier" ADD FOREIGN KEY ("tierarzt_id") REFERENCES "Personal" ("id");
+ 
+ALTER TABLE "Tier" ADD FOREIGN KEY ("gehege_id") REFERENCES "Gehege" ("id");
+ 
+ALTER TABLE "Personal_Gehege" ADD FOREIGN KEY ("gehege_id") REFERENCES "Gehege" ("id");
+
+ALTER TABLE "Personal_Gehege" ADD FOREIGN KEY ("tierpfleger_id") REFERENCES "Personal" ("id");
+ 
+ALTER TABLE "Verkaufsstand" ADD FOREIGN KEY ("verkauefer_id") REFERENCES "Personal" ("id");
+ 
+ALTER TABLE "Umsatz" ADD FOREIGN KEY ("stand_id") REFERENCES "Verkaufsstand" ("id");
+ 
+ALTER TABLE "Umsatz" ADD FOREIGN KEY ("spende_id") REFERENCES "Spende" ("id");
+
+-----------------------------------------------------------------------------------------------
+
+POST 	/compounds			//Gehege anlegen
+PATCH	/compunds/:id		//Gehege bearbeiten (Bspw. Größe ändern), Pfleger zuweisen
+ 
+GET		/compounds			//Alle Gehege ausgeben
+GET		/compounds/:id		//Gehege mit :id ausgeben
+
+GET /animals
+PATCH	/animals/:id
+	{reason: sale, price: 10.0}
+POST	/animals
+	{name: ....}
+DELETE	/animals/:id
+ 
+POST 	/boothes (stand)
+PATCH 	/boothes
+ 
+ 
+POST 	/staff
+PATCH 	/staff/:id			//Gehege zuweisen
+	- Bei Pfleger Zuweisung: Max 3 Gehege
+	- Bei Pfleger Zuweisung: Ist staff Pfleger?
