@@ -68,6 +68,8 @@ CREATE TABLE "Spende" (
   "pdf_url" text
 );
 
+-----------------------------------------------------------------------------------------------
+
 ALTER TABLE "Tier" ADD FOREIGN KEY ("tierarzt_id") REFERENCES "Personal" ("id");
  
 ALTER TABLE "Tier" ADD FOREIGN KEY ("gehege_id") REFERENCES "Gehege" ("id");
@@ -97,8 +99,8 @@ POST	/animals
 	{name: ....}
 DELETE	/animals/:id
  
-POST 	/boothes (stand)
-PATCH 	/boothes
+POST 	/boothes (stand) hinzufügen
+PATCH 	/boothes bearbeiten
  
  
 POST 	/staff

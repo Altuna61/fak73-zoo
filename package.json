@@ -3,7 +3,7 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc"
+    "build": "bun build src/index.ts --target node --outdir dist"
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
