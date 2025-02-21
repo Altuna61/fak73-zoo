@@ -130,6 +130,6 @@ app.post("/stand", async (c) => {
   return c.json(response.rows);
 });
 
-serve({ fetch: app.fetch, port: 3000 }, (info) => {
+serve({ fetch: app.fetch, port: 8080 }, (info) => {
   console.log(`Server is running on http://${info.address}:${info.port}`);
 });
